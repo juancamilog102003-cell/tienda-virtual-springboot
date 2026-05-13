@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>Tienda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   </head>
   <body>
     <div class="container mt-5">
@@ -12,9 +12,13 @@
     </div>
 
     <div class="container mt-5">
-        <h2>Productos </h2>
-        <table class="table">
-            <thead>
+        <h2>Productos</h2>
+
+        <!-- Botón para agregar nuevo producto -->
+        <a th:href="@{/productos/nuevo}" class="btn btn-success mb-3">Agregar Producto</a>
+
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
                 <tr>
                     <th>id</th>
                     <th>nombre</th>
@@ -24,27 +28,35 @@
                     <th>marca</th>
                     <th>imagen</th>
                     <th>tipo</th>
+                    <th>acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="producto : ${productos}">
-                    <td th:text="${producto.id}">1</td>
-                    <td th:text="${producto.nombre}">nombre del producto</td>
-                    <td th:text="${producto.descripcion}">descripcion</td>
-                    <td th:text="${producto.precio}">precio</td>
-                    <td th:text="${producto.stock} ">stock</td>
-                    <td th:text="${producto.marca}">marca</td>
+                    <td th:text="${producto.id}"></td>
+                    <td th:text="${producto.nombre}"></td>
+                    <td th:text="${producto.descripcion}"></td>
+                    <td th:text="${producto.precio}"></td>
+                    <td th:text="${producto.stock}"></td>
+                    <td th:text="${producto.marca}"></td>
                     <td>
-                           <img th:src="${producto.imagenUrl}" 
-                           alt="producto"
-                            width="100"
-                            class="img-fluid rounded shadow-sm">
+                        <img th:src="${producto.imagenUrl}" 
+                             alt="producto"
+                             width="100"
+                             class="img-fluid rounded shadow-sm">
                     </td> 
-                    <td th:text="${producto.tipoProducto}">tipo</td>
+                    <td th:text="${producto.tipoProducto.nombre}"></td>
+                    <td>
+                        <a th:href="@{/productos/editar/{id}(id=${producto.id})}" 
+                           class="btn btn-secondary btn-sm">Editar</a>
+                        <a th:href="@{/productos/eliminar/{id}(id=${producto.id})}" 
+                           class="btn btn-danger btn-sm">Eliminar</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
