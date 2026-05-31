@@ -9,7 +9,7 @@
   <body>
     <div class="container">
         <h1>Agregar Nuevo Producto</h1>
-        <form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
+        <form th:action="@{/productos/guardar}" th:object="${producto}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{id}">
 
             <!-- Nombre -->
@@ -42,10 +42,14 @@
               <input type="text" th:field="*{marca}" class="form-control" id="marca">
             </div>
 
-            <!-- Imagen URL -->
+            <!-- Imagen -->
             <div class="mb-3">
-              <label for="imagenUrl" class="form-label">Imagen URL</label>
-              <input type="text" th:field="*{imagenUrl}" class="form-control" id="imagenUrl">
+              <label for="imagenFile" class="form-label">Imagen del producto</label>
+              <input type="file" name="imagenFile" class="form-control" id="imagenFile" accept="image/*">
+              <div th:if="*{imagenUrl != null and !imagenUrl.isEmpty()}" class="mt-2">
+                <img th:src="*{imagenUrl}" alt="Imagen actual" width="100" class="img-thumbnail">
+                <small class="text-muted d-block">Imagen actual. Sube una nueva para reemplazarla.</small>
+              </div>
             </div>
 
             <!-- Tipo de Producto -->

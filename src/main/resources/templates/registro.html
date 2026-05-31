@@ -1,0 +1,90 @@
+<!doctype html>
+<!--
+  xmlns:th  ->  activa las etiquetas de Thymeleaf en el HTML.
+  lang="es" ->  idioma español.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registro de Usuario</title>
+    <!-- Bootstrap 5 desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+
+          <h1 class="mb-4 text-center">Registrarse</h1>
+
+          <!--
+            th:action   ->  envia el formulario a POST /registro.
+            th:object   ->  vincula los campos con el objeto "usuario"
+                            que el controlador agregó al modelo.
+            method="post" ->  envía los datos por POST (no se ven en la URL).
+          -->
+          <form th:action="@{/registro}" th:object="${usuario}" method="post" class="border p-4 rounded shadow-sm">
+
+            <!-- ========== Campo NOMBRE ========== -->
+            <!--
+              th:classappend  ->  agrega "is-invalid" SOLO si el campo
+                                  "nombre" tiene errores de validación.
+                                  Bootstrap pinta el borde rojo.
+            -->
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text"
+                     th:field="*{nombre}"
+                     th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''"
+                     class="form-control"
+                     id="nombre"
+                     placeholder="Tu nombre">
+              <!--
+                th:errors  ->  muestra el mensaje de error si la validación
+                                de "nombre" falló (ej: "El nombre es obligatorio").
+              -->
+              <div th:if="${#fields.hasErrors('nombre')}" class="invalid-feedback" th:errors="*{nombre}"></div>
+            </div>
+
+            <!-- ========== Campo CORREO ========== -->
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo electrónico</label>
+              <input type="email"
+                     th:field="*{correo}"
+                     th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid' : ''"
+                     class="form-control"
+                     id="correo"
+                     placeholder="correo@ejemplo.com">
+              <div th:if="${#fields.hasErrors('correo')}" class="invalid-feedback" th:errors="*{correo}"></div>
+            </div>
+
+            <!-- ========== Campo PASSWORD ========== -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password"
+                     th:field="*{password}"
+                     th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                     class="form-control"
+                     id="password"
+                     placeholder="Mínimo 6 caracteres">
+              <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback" th:errors="*{password}"></div>
+            </div>
+
+            <!-- ========== BOTÓN GUARDAR ========== -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Crear cuenta</button>
+            </div>
+
+          </form>
+
+          <!-- Enlace por si ya tiene cuenta -->
+          <p class="text-center mt-3">
+            ¿Ya tienes cuenta? <a href="/login">Inicia sesión</a>
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

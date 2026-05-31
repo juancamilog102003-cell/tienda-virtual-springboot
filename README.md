@@ -1,120 +1,149 @@
-# Tienda Virtual - Proyecto Académico Spring Boot 
+Tienda Virtual - Proyecto Académico Spring Boot
 
-Aplicación web desarrollada para la gestión de productos en una tienda virtual.  
-Permite registrar, listar, editar y eliminar productos, además de asociarlos a una categoría o tipo de producto mediante una relación en base de datos.
+Aplicación web desarrollada con Spring Boot, Thymeleaf y MySQL que simula el funcionamiento de una tienda virtual. El sistema permite a los usuarios registrarse, iniciar sesión, gestionar productos, agregar artículos al carrito, realizar compras, consultar su historial de pedidos y administrar una lista de productos favoritos.
 
-## Funcionalidades
+Funcionalidades
 
-- Registrar nuevos productos
-- Listar productos disponibles
-- Editar productos existentes
-- Eliminar productos
-- Asociar cada producto a un tipo de producto
-- Gestión de base de datos relacional con MySQL
+Gestión de Usuarios
 
-## Módulos del sistema
+* Registro de usuarios
+* Inicio de sesión
+* Gestión de sesiones
+* Roles de usuario
 
-### Gestión de Productos
-Permite administrar productos con información como:
+Gestión de Productos
 
-- Nombre
-- Precio
-- Stock
-- Descripción
-- Imagen
-- Tipo de producto
+* Registrar productos
+* Listar productos
+* Editar productos
+* Eliminar productos
+* Visualizar información detallada de productos
 
-### Gestión de Tipos de Producto
-Se implementó una entidad independiente para clasificar productos como:
+Gestión de Tipos de Producto
 
-- Consola
-- PC
-- Juego
-- Accesorio
+* Clasificación de productos por categorías
+* Relación entre productos y tipos de producto
 
-Cada producto se relaciona con un tipo de producto mediante clave foránea.
+Carrito de Compras
 
-## Modelo de Base de Datos
+* Agregar productos al carrito
+* Visualizar carrito
+* Eliminar productos del carrito
+* Calcular total de la compra
+* Vaciar carrito al finalizar compra
 
-Se implementó una base de datos relacional en MySQL con las siguientes tablas:
+Gestión de Pedidos
 
-### Tabla producto
-Contiene la información principal de cada producto.
+* Finalizar compra
+* Generar pedidos automáticamente
+* Registrar detalles de cada pedido
+* Consultar historial de compras
 
-### Tabla tipo_producto
-Contiene las categorías de productos.
+Gestión de Favoritos
 
-Relación:
+* Agregar productos a favoritos
+* Consultar lista de favoritos
+* Eliminar productos favoritos
+* Evitar favoritos duplicados
 
-- Un tipo de producto puede tener muchos productos
-- Un producto pertenece a un solo tipo de producto
+Modelo de Base de Datos
 
-## Tecnologías utilizadas
+La aplicación utiliza MySQL y Spring Data JPA para la persistencia de datos.
 
-- Java 17
-- Spring Boot
-- Spring Data JPA
-- Hibernate
-- Thymeleaf
-- MySQL
-- HTML5
-- CSS3
-- Bootstrap
-- Maven
+Entidades principales
 
-## Estructura del proyecto
+* Usuario
+* Producto
+* TipoProducto
+* Carrito
+* DetalleCarrito
+* Pedido
+* DetallePedido
+* Favorito
 
-src/main/java/com/tienda/tienda
+Relaciones implementadas
 
-- controller  
-  - ProductoController.java
+* Un TipoProducto tiene muchos Productos.
+* Un Usuario puede tener un Carrito.
+* Un Carrito contiene múltiples DetalleCarrito.
+* Un Usuario puede realizar múltiples Pedidos.
+* Un Pedido contiene múltiples DetallePedido.
+* Un Usuario puede tener múltiples Favoritos.
+* Un Producto puede pertenecer a múltiples Favoritos.
 
-- model  
-  - Producto.java  
-  - TipoProducto.java  
+Tecnologías Utilizadas
 
-- repository  
-  - ProductoRepository.java  
-  - TipoProductoRepository.java  
+* Java 25
+* Spring Boot
+* Spring Data JPA
+* Hibernate
+* Thymeleaf
+* MySQL
+* HTML5
+* CSS3
+* Bootstrap 5
+* Maven
 
-- service  
-  - ProductoService.java  
+Arquitectura del Proyecto
 
-src/main/resources/templates
+El proyecto sigue el patrón MVC (Model - View - Controller):
 
-- index.html  
-- formulario.html  
+* Model: Entidades JPA
+* Repository: Acceso a datos
+* Service: Lógica de negocio
+* Controller: Gestión de solicitudes HTTP
+* View: Plantillas Thymeleaf
 
-## Cómo ejecutar el proyecto
+Cómo Ejecutar el Proyecto
 
-1. Clonar repositorio
+1. Clonar el repositorio:
 
-```bash
 git clone https://github.com/juancamilog102003-cell/tienda-virtual-springboot.git
-```
 
-2. Abrir proyecto en Visual Studio Code o IntelliJ IDEA
+2. Crear la base de datos:
 
-3. Configurar conexión MySQL en:
+CREATE DATABASE tiendavirtual;
 
-```properties
+3. Configurar las credenciales de MySQL en:
+
 application.properties
-```
 
-4. Ejecutar aplicación:
+4. Ejecutar la aplicación:
 
-```bash
 mvn spring-boot:run
-```
 
-5. Abrir navegador:
+5. Abrir en el navegador:
 
-```bash
 http://localhost:8080
-```
 
-## Autor
+Funcionalidades Implementadas para el Proyecto Académico
 
-Juan Camilo Gallego Barbosa 
-Oscar Diaz 
-Proyecto académico - Spring Boot  + MySQL
+✓ CRUD de Productos
+
+✓ Gestión de Categorías
+
+✓ Relaciones JPA (OneToMany y ManyToOne)
+
+✓ Persistencia en MySQL
+
+✓ Registro e Inicio de Sesión
+
+✓ Carrito de Compras
+
+✓ Finalización de Compras
+
+✓ Historial de Pedidos
+
+✓ Gestión de Favoritos
+
+✓ Arquitectura MVC
+
+Autores
+
+Juan Camilo Gallego Barbosa
+
+Oscar Díaz
+
+Proyecto Académico - Ingeniería de Sistemas
+
+Spring Boot + MySQL + Thymeleaf

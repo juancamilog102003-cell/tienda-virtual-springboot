@@ -1,0 +1,108 @@
+<!doctype html>
+<!--
+  xmlns:th  ->  activa las etiquetas de Thymeleaf en el HTML.
+  lang="es" ->  idioma español.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mis Favoritos</title>
+    <!-- Bootstrap 5 desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body style="background-color: #1e1e2f; color: white;">
+
+    <div class="container mt-5">
+
+      <!-- ========== ENCABEZADO ========== -->
+      <div class="text-center mb-5">
+        <h1 class="mb-3">Mis Favoritos</h1>
+        <p class="lead" th:text="'Favoritos de ' + ${session.usuario.nombre}">Favoritos</p>
+
+        <!--
+          Enlace para volver a la tienda.
+          th:href="@{/tienda}"  ->  redirige al listado de productos.
+        -->
+        <a th:href="@{/tienda}" class="btn btn-primary">Seguir Comprando</a>
+        <a th:href="@{/carrito}" class="btn btn-success">Mi Carrito</a>
+        <a th:href="@{/mis-compras}" class="btn btn-info">Mis Compras</a>
+        <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
+      </div>
+
+      <!-- ========== TABLA DE FAVORITOS ========== -->
+      <!--
+        th:if="${not #lists.isEmpty(favoritos)}"  ->  solo se muestra
+        si el usuario tiene al menos un favorito.
+      -->
+      <div th:if="${not #lists.isEmpty(favoritos)}">
+
+        <div class="table-responsive">
+          <table class="table table-dark table-striped align-middle">
+
+            <!-- Encabezados de la tabla -->
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Marca</th>
+                <th>Precio</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!--
+                th:each="favorito : ${favoritos}"  ->  recorre cada favorito
+                que el usuario ha marcado.
+
+                Cada "favorito" es un objeto Favorito que contiene:
+                  - favorito.id               (id del registro favorito)
+                  - favorito.producto.nombre  (nombre del producto)
+                  - favorito.producto.marca   (marca del producto)
+                  - favorito.producto.precio  (precio del producto)
+              -->
+              <tr th:each="favorito : ${favoritos}">
+
+                <!-- Nombre del producto -->
+                <td th:text="${favorito.producto.nombre}">Producto</td>
+
+                <!-- Marca del producto -->
+                <td th:text="${favorito.producto.marca}">Marca</td>
+
+                <!-- Precio del producto -->
+                <td>$<span th:text="${favorito.producto.precio}">0.00</span></td>
+
+                <!--
+                  Botón para eliminar este producto de favoritos.
+                  th:action="@{'/favoritos/eliminar/' + ${favorito.id}}"  ->
+                    genera una URL como /favoritos/eliminar/5 para el favorito con id=5.
+                  method="post"  ->  usa POST (no GET) para eliminar.
+                -->
+                <td>
+                  <form th:action="@{'/favoritos/eliminar/' + ${favorito.id}}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                  </form>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ========== SIN FAVORITOS ========== -->
+      <!--
+        th:if="${#lists.isEmpty(favoritos)}"  ->  se muestra solo cuando
+        el usuario no tiene ningún producto favorito.
+      -->
+      <div th:if="${#lists.isEmpty(favoritos)}" class="text-center mt-5">
+        <h3>No tienes productos favoritos</h3>
+        <p class="text-secondary">Explora nuestros productos y agrega tus favoritos.</p>
+        <a th:href="@{/tienda}" class="btn btn-primary btn-lg">Ir a la Tienda</a>
+      </div>
+
+    </div>
+
+  </body>
+</html>

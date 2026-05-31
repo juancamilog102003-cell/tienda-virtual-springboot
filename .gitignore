@@ -31,3 +31,19 @@ build/
 
 ### VS Code ###
 .vscode/
+
+uploads/
+
+
+# Variables de entorno
+.env
+
+# Logs de errores de Java
+hs_err_pid*
+replay_pid*
+
+# VS Code
+.vscode/
+
+# Archivos compilados
+target/

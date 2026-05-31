@@ -1,0 +1,98 @@
+<!doctype html>
+<!--
+  xmlns:th  ->  activa las etiquetas de Thymeleaf en el HTML.
+  lang="es" ->  idioma español.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mis Compras</title>
+    <!-- Bootstrap 5 desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body style="background-color: #1e1e2f; color: white;">
+
+    <div class="container mt-5">
+
+      <!-- ========== ENCABEZADO ========== -->
+      <div class="text-center mb-5">
+        <h1 class="mb-3">Mis Compras</h1>
+        <p class="lead" th:text="'Historial de ' + ${session.usuario.nombre}">Historial</p>
+
+        <!--
+          Enlace para volver a la tienda.
+          th:href="@{/tienda}"  ->  redirige al listado de productos.
+        -->
+        <a th:href="@{/tienda}" class="btn btn-primary">Seguir Comprando</a>
+        <a th:href="@{/carrito}" class="btn btn-success">Mi Carrito</a>
+        <a th:href="@{/mis-favoritos}" class="btn btn-warning">Mis Favoritos</a>
+        <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
+      </div>
+
+      <!-- ========== TABLA DE PEDIDOS ========== -->
+      <!--
+        th:if="${not #lists.isEmpty(pedidos)}"  ->  solo se muestra
+        si el usuario tiene al menos un pedido.
+      -->
+      <div th:if="${not #lists.isEmpty(pedidos)}">
+
+        <div class="table-responsive">
+          <table class="table table-dark table-striped align-middle">
+
+            <!-- Encabezados de la tabla -->
+            <thead>
+              <tr>
+                <th>ID del Pedido</th>
+                <th>Fecha</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!--
+                th:each="pedido : ${pedidos}"  ->  recorre cada pedido
+                que el usuario ha realizado.
+
+                Cada "pedido" es un objeto Pedido que contiene:
+                  - pedido.id             (número único del pedido)
+                  - pedido.fechaPedido    (fecha y hora de la compra)
+                  - pedido.total          (monto total pagado)
+              -->
+              <tr th:each="pedido : ${pedidos}">
+
+                <!-- ID del pedido -->
+                <td th:text="${pedido.id}">1</td>
+
+                <!--
+                  Fecha del pedido.
+                  Se formatea usando #temporals.format() de Thymeleaf.
+                  "dd/MM/yyyy HH:mm"  ->  ejemplo: 29/05/2026 15:30
+                -->
+                <td th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}">29/05/2026 15:30</td>
+
+                <!-- Total del pedido -->
+                <td>$<span th:text="${#numbers.formatDecimal(pedido.total, 0, 2)}">0.00</span></td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ========== SIN COMPRAS ========== -->
+      <!--
+        th:if="${#lists.isEmpty(pedidos)}"  ->  se muestra solo cuando
+        el usuario no ha realizado ninguna compra.
+      -->
+      <div th:if="${#lists.isEmpty(pedidos)}" class="text-center mt-5">
+        <h3>Aún no has realizado ninguna compra</h3>
+        <p class="text-secondary">Explora nuestros productos y realiza tu primer pedido.</p>
+        <a th:href="@{/tienda}" class="btn btn-primary btn-lg">Ir a la Tienda</a>
+      </div>
+
+    </div>
+
+  </body>
+</html>

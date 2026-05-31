@@ -1,0 +1,153 @@
+<!doctype html>
+<!--
+  xmlns:th  ->  activa las etiquetas de Thymeleaf en el HTML.
+  lang="es" ->  idioma español.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mi Carrito</title>
+    <!-- Bootstrap 5 desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body style="background-color: #1e1e2f; color: white;">
+
+    <div class="container mt-5">
+
+      <!-- ========== ENCABEZADO ========== -->
+      <div class="text-center mb-5">
+        <h1 class="mb-3">Mi Carrito</h1>
+        <p class="lead" th:text="'Bienvenido, ' + ${session.usuario.nombre}">Bienvenido, Cliente</p>
+
+        <!--
+          Enlace para volver a la tienda.
+          th:href="@{/tienda}"  ->  redirige al listado de productos.
+        -->
+        <a th:href="@{/tienda}" class="btn btn-primary">Seguir Comprando</a>
+        <a th:href="@{/mis-favoritos}" class="btn btn-warning">Mis Favoritos</a>
+        <a th:href="@{/mis-compras}" class="btn btn-info">Mis Compras</a>
+        <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
+      </div>
+
+      <!-- ========== MENSAJE DE COMPRA EXITOSA ========== -->
+      <!--
+        th:if="${mensajeExito}"  ->  se muestra solo después de finalizar
+        la compra. El mensaje se coloca en el modelo desde el controlador
+        y se elimina de la sesión para que no reaparezca al recargar.
+      -->
+      <div th:if="${mensajeExito}" class="alert alert-success text-center">
+        <span th:text="${mensajeExito}">Compra exitosa</span>
+      </div>
+
+      <!-- ========== TABLA DEL CARRITO ========== -->
+      <!--
+        th:if="${not #lists.isEmpty(detalles)}"  ->  solo se muestra
+        si el carrito tiene al menos un producto.
+      -->
+      <div th:if="${not #lists.isEmpty(detalles)}">
+
+        <div class="table-responsive">
+          <table class="table table-dark table-striped align-middle">
+
+            <!-- Encabezados de la tabla -->
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Marca</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!--
+                th:each="detalle : ${detalles}"  ->  recorre cada producto
+                que el usuario agregó a su carrito.
+
+                Cada "detalle" es un objeto DetalleCarrito que contiene:
+                  - detalle.producto.nombre   (nombre del producto)
+                  - detalle.producto.marca    (marca del producto)
+                  - detalle.producto.precio   (precio unitario)
+                  - detalle.cantidad          (cantidad que el usuario eligió)
+              -->
+              <tr th:each="detalle : ${detalles}">
+
+                <!-- Nombre del producto -->
+                <td th:text="${detalle.producto.nombre}">Producto</td>
+
+                <!-- Marca del producto -->
+                <td th:text="${detalle.producto.marca}">Marca</td>
+
+                <!-- Cantidad -->
+                <td th:text="${detalle.cantidad}">1</td>
+
+                <!-- Precio unitario -->
+                <td>$<span th:text="${detalle.producto.precio}">0.00</span></td>
+
+                <!--
+                  Subtotal = precio del producto * cantidad.
+                  Se calcula directamente en la vista usando Thymeleaf.
+                  Ejemplo: si precio = 100 y cantidad = 3, subtotal = 300.
+                -->
+                <td>$<span th:text="${detalle.producto.precio * detalle.cantidad}">0.00</span></td>
+
+                <!--
+                  Botón para eliminar este producto del carrito.
+                  th:action="@{'/carrito/eliminar/' + ${detalle.id}}"  ->
+                    genera una URL como /carrito/eliminar/5 para el detalle con id=5.
+                  method="post"  ->  usa POST (no GET) para eliminar.
+                -->
+                <td>
+                  <form th:action="@{'/carrito/eliminar/' + ${detalle.id}}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                  </form>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ========== TOTAL GENERAL ========== -->
+        <!--
+          Muestra la suma de todos los subtotales del carrito.
+          El controlador calculó este valor y lo guardó en el modelo
+          con el nombre "total".
+        -->
+        <div class="text-end mt-4">
+          <h3 class="text-success">
+            Total: $<span th:text="${#numbers.formatDecimal(total, 0, 2)}">0.00</span>
+          </h3>
+        </div>
+
+        <!-- ========== BOTÓN FINALIZAR COMPRA ========== -->
+        <!--
+          Formulario que envía una petición POST a /carrito/finalizar
+          para procesar la compra y convertir el carrito en un pedido.
+        -->
+        <div class="text-end mt-3">
+          <form th:action="@{/carrito/finalizar}" method="post">
+            <button type="submit" class="btn btn-success btn-lg">Finalizar Compra</button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- ========== CARRITO VACÍO ========== -->
+      <!--
+        th:if="${#lists.isEmpty(detalles)}"  ->  se muestra solo cuando
+        el carrito no tiene ningún producto.
+      -->
+      <div th:if="${#lists.isEmpty(detalles)}" class="text-center mt-5">
+        <h3>Tu carrito está vacío</h3>
+        <p class="text-secondary">Agrega productos desde la tienda para empezar a comprar.</p>
+        <a th:href="@{/tienda}" class="btn btn-primary btn-lg">Ir a la Tienda</a>
+      </div>
+
+    </div>
+
+  </body>
+</html>

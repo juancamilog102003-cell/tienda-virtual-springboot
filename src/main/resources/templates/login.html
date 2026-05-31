@@ -1,0 +1,87 @@
+<!doctype html>
+<!--
+  xmlns:th  ->  activa las etiquetas de Thymeleaf en el HTML.
+  lang="es" ->  idioma español.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iniciar Sesión</title>
+    <!-- Bootstrap 5 desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+
+          <h1 class="mb-4 text-center">Iniciar Sesión</h1>
+
+          <!--
+            th:action   ->  envía el formulario a POST /login.
+            th:object   ->  vincula los campos con el objeto "usuario"
+                            que el controlador agregó al modelo.
+            method="post" ->  envía los datos por POST (no se ven en la URL).
+          -->
+          <form th:action="@{/login}" th:object="${usuario}" method="post" class="border p-4 rounded shadow-sm">
+
+            <!-- ========== Campo CORREO ========== -->
+            <!--
+              th:classappend  ->  agrega "is-invalid" SOLO si el campo
+                                  "correo" tiene errores de validación.
+                                  Bootstrap pinta el borde rojo.
+            -->
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo electrónico</label>
+              <input type="email"
+                     th:field="*{correo}"
+                     th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid' : ''"
+                     class="form-control"
+                     id="correo"
+                     placeholder="correo@ejemplo.com"
+                     required>
+              <!--
+                th:errors  ->  muestra el mensaje de error si la validación
+                                de "correo" falló.
+              -->
+              <div th:if="${#fields.hasErrors('correo')}" class="invalid-feedback" th:errors="*{correo}"></div>
+            </div>
+
+            <!-- ========== Campo CONTRASEÑA ========== -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password"
+                     th:field="*{password}"
+                     th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                     class="form-control"
+                     id="password"
+                     placeholder="Ingresa tu contraseña"
+                     required>
+              <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback" th:errors="*{password}"></div>
+            </div>
+
+            <!-- ========== ERROR GENERAL (ej: credenciales inválidas) ========== -->
+            <!--
+              Este bloque se muestra si el controlador agregó un error global
+              al modelo (por ejemplo, "Correo o contraseña incorrectos").
+            -->
+            <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+
+            <!-- ========== BOTÓN INICIAR SESIÓN ========== -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            </div>
+
+          </form>
+
+          <!-- Enlace por si no tiene cuenta -->
+          <p class="text-center mt-3">
+            ¿No tienes cuenta? <a href="/registro">Regístrate aquí</a>
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
